@@ -8,8 +8,8 @@ public class Doorman extends Thread{
 	 * @param queue		The customer queue.
 	 * @param gui		A reference to the GUI interface.
 	 */
-	CustomerQueue queue;
-	Gui gui;
+	private CustomerQueue queue;
+	private Gui gui;
 	
 	
 	public Doorman(CustomerQueue queue, Gui gui) { 
@@ -44,12 +44,8 @@ public class Doorman extends Thread{
 	 * Makes the doorman(thread) go to sleep.
 	 */
 	private void sleep(){
-		int min = Constants.MIN_DOORMAN_SLEEP;
-		int max = Constants.MAX_DOORMAN_SLEEP;
-		int r = min+(int)(Math.random()*(max-min+1));
-		
 		try {
-			super.sleep(r);
+			super.sleep(Globals.doormanSleep);
 		} catch (InterruptedException e) {
 			
 		}
