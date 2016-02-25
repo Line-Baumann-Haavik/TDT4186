@@ -22,7 +22,7 @@ public class CustomerQueue {
     	this.gui = gui;
 	}
 
-	public boolean addCustomer(Customer customer) {
+	public synchronized boolean addCustomer(Customer customer) {
 		if (queue[nextCustomerSeat] != null) {
 			return false;
 		}
@@ -36,15 +36,18 @@ public class CustomerQueue {
 	}
 	
 	public Customer popCustomer(int pos) {
-		if (queue[oldestCustomer] == null) {
-			return null;
-		}
-		gui.emptyLoungeChair(oldestCustomer);
-		Customer customer = queue[oldestCustomer];
-		queue[oldestCustomer] = null;
-		oldestCustomer++;
-		if (oldestCustomer == queueLength) {
-			oldestCustomer = 0;
+		Customer customer;
+		synchronized (this) {
+			if (queue[oldestCustomer] == null) {
+				return null;
+			}
+			gui.emptyLoungeChair(oldestCustomer);
+			customer = queue[oldestCustomer];
+			queue[oldestCustomer] = null;
+			oldestCustomer++;
+			if (oldestCustomer == queueLength) {
+				oldestCustomer = 0;
+			}			
 		}
 		gui.fillBarberChair(pos, customer);
 		return customer;
