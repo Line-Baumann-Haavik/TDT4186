@@ -24,26 +24,21 @@ public class Barber extends Thread{
 	 * Starts the barber running as a separate thread.
 	 */
 	public void startThread() {
-		// Begin with adding customer to chair
 		super.start();
-		
-		//end with removing customer from chair and then sleeping for an unknown time
 	}
 
 	/**
 	 * Stops the barber thread.
 	 */
 	public void stopThread() {
-		// Incomplete
 		super.stop();
 	}
 
-	private void getCustomer(int pos){
-		
-		
-	}
 	private void work(){
 		Customer customer = queue.popCustomer(pos);
+		if (customer == null) {
+			return;
+		}
 		try {
 			super.sleep(Globals.barberWork);
 		} catch (InterruptedException e) {
@@ -51,12 +46,11 @@ public class Barber extends Thread{
 		}
 		gui.emptyBarberChair(pos);
 	}
+	
 	private void sleep(){
-		
 		try {
 			super.sleep(Globals.barberSleep);
 		} catch (InterruptedException e) {
-			
 		}
 	}
 	
@@ -67,8 +61,6 @@ public class Barber extends Thread{
 			gui.barberIsAwake(pos);
 			work();
 		}
-		
 	}
-	
 }
 

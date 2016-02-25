@@ -43,7 +43,7 @@ public class CustomerQueue {
 		gui.println("Barber #" + pos + " is waiting for customers...");
 		synchronized (this) {
 			if (queue[oldestCustomer] == null) {
-				gui.println("Barber #" + pos + " was notified of no customers available.");
+				gui.println("Barber #" + pos + " was notified of no customers.");
 				return null;
 			}
 			gui.emptyLoungeChair(oldestCustomer);
