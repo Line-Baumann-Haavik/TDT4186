@@ -23,10 +23,13 @@ public class CustomerQueue {
 	}
 
 	public synchronized boolean addCustomer(Customer customer) {
+		gui.println("Doorman is waiting for free chairs...");
 		if (queue[nextCustomerSeat] != null) {
+			gui.println("Doorman was notified of full waitline.");
 			return false;
 		}
 		queue[nextCustomerSeat] = customer;
+		gui.println("Doorman was notified of a free chair.");
 		gui.fillLoungeChair(nextCustomerSeat, customer);
 		nextCustomerSeat++;
 		if (nextCustomerSeat == queueLength) {
@@ -37,8 +40,10 @@ public class CustomerQueue {
 	
 	public Customer popCustomer(int pos) {
 		Customer customer;
+		gui.println("Barber #" + pos + " is waiting for customers...");
 		synchronized (this) {
 			if (queue[oldestCustomer] == null) {
+				gui.println("Barber #" + pos + " was notified of no customers available.");
 				return null;
 			}
 			gui.emptyLoungeChair(oldestCustomer);
@@ -49,6 +54,7 @@ public class CustomerQueue {
 				oldestCustomer = 0;
 			}			
 		}
+		gui.println("Barber #" + pos + " was notified of a new customer.");
 		gui.fillBarberChair(pos, customer);
 		return customer;
 	}
