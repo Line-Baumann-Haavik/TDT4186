@@ -43,6 +43,7 @@ public class Barber extends Thread{
 		
 	}
 	private void work(){
+		Customer customer = queue.popCustomer(pos);
 		try {
 			super.sleep(Globals.barberWork);
 		} catch (InterruptedException e) {
@@ -58,5 +59,16 @@ public class Barber extends Thread{
 			
 		}
 	}
+	
+	public void run(){
+		while(true){
+			gui.barberIsSleeping(pos);
+			sleep();
+			gui.barberIsAwake(pos);
+			work();
+		}
+		
+	}
+	
 }
 
