@@ -25,6 +25,7 @@ public class Barber extends Thread{
 	 */
 	public void startThread() {
 		// Begin with adding customer to chair
+		super.start();
 		
 		//end with removing customer from chair and then sleeping for an unknown time
 	}
@@ -34,11 +35,28 @@ public class Barber extends Thread{
 	 */
 	public void stopThread() {
 		// Incomplete
+		super.stop();
 	}
 
 	private void getCustomer(int pos){
 		
 		
+	}
+	private void work(){
+		try {
+			super.sleep(Globals.barberWork);
+		} catch (InterruptedException e) {
+			
+		}
+		gui.emptyBarberChair(pos);
+	}
+	private void sleep(){
+		
+		try {
+			super.sleep(Globals.barberSleep);
+		} catch (InterruptedException e) {
+			
+		}
 	}
 }
 
