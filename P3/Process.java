@@ -105,8 +105,16 @@ public class Process implements Constants
 	public long getMemoryNeeded() {
 		return memoryNeeded;
 	}
+	
+    public long getCpuTimeNeeded() {
+		return cpuTimeNeeded;
+	}
 
-    /**
+	public long getTimeToNextIoOperation() {
+		return timeToNextIoOperation;
+	}
+
+	/**
 	 * Updates the statistics collected by the given Statistic object, adding
 	 * data collected by this process. This method is called when the process
 	 * leaves the system.
@@ -114,6 +122,12 @@ public class Process implements Constants
      */
 	public void updateStatistics(Statistics statistics) {
 		statistics.totalTimeSpentWaitingForMemory += timeSpentWaitingForMemory;
+		statistics.totalTimeSpentWaitingForIO += timeSpentWaitingForIo;
+		statistics.totalTimeSpentWaitingForCPU += timeSpentInReadyQueue;
+		statistics.totalTimeSpentInCPU += timeSpentInCpu;
+		statistics.totalTimeSpentInIO += timeSpentInIo;
+		statistics.totalTimesPlacedInCPU+=nofTimesInReadyQueue;
+		statistics.totalTimesPlacedInIO+=nofTimesInIoQueue;
 		statistics.nofCompletedProcesses++;
 	}
 
