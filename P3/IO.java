@@ -1,6 +1,6 @@
 
+public class IO implements Constants{
 
-public class IO {
 	
 	private Queue IOqueue;
 	private Statistics statistics;
@@ -10,6 +10,27 @@ public class IO {
 		this.IOqueue = IOqueue;
 		this.statistics = statistics;
 		
+	}
+	
+	public Event addIOrequest(Process requestingProcess, long clock){
+		ioQueue.insert(requestingProcess); 
+		requestingProcess.calculateTimeToNextIoOperation(); 
+	}
+	
+	public Event startIoOperation(long clock) { 
+		if(activeProcess == null) { 
+		// The device is free 
+			if(!ioQueue.isEmpty()) { 
+				// Let the first process in the queue start I/O -----
+				// Update statistics 
+				statistics.nofProcessedIoOperations++;
+				// Calculate the duration of the I/O operation and return the END_IO event ------
+				return new Event(END_IO, clock + ioOperationTime); 
+		
+			}
+		}
+		// else no process are waiting for I/O
+		// else another process is already doing I/O
 	}
 	
 	public void timePassed(long timePassed) {

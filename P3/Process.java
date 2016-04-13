@@ -97,6 +97,28 @@ public class Process implements Constants
 		  timeSpentWaitingForMemory += clock - timeOfLastEvent;
 		  timeOfLastEvent = clock;
     }
+    
+    public void leftCPUQueue(long clock) {
+    	timeSpentInReadyQueue += clock - timeOfLastEvent;
+		timeOfLastEvent = clock;
+		nofTimesInReadyQueue +=1;
+    }
+    
+    public void leftCPU(long clock) {
+    	timeSpentInCpu += clock - timeOfLastEvent;
+		timeOfLastEvent = clock;
+    }
+    
+    public void leftIOQueue(long clock) {
+    	timeSpentWaitingForIo += clock - timeOfLastEvent;
+		timeOfLastEvent = clock;
+		nofTimesInIoQueue +=1;
+    }
+    
+    public void leftIO(long clock){
+    	timeSpentInIo += clock - timeOfLastEvent;
+		timeOfLastEvent = clock;
+    }
 
     /**
 	 * Returns the amount of memory needed by this process.
