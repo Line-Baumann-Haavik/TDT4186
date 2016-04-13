@@ -105,8 +105,16 @@ public class Process implements Constants
 	public long getMemoryNeeded() {
 		return memoryNeeded;
 	}
+	
+    public long getCpuTimeNeeded() {
+		return cpuTimeNeeded;
+	}
 
-    /**
+	public long getTimeToNextIoOperation() {
+		return timeToNextIoOperation;
+	}
+
+	/**
 	 * Updates the statistics collected by the given Statistic object, adding
 	 * data collected by this process. This method is called when the process
 	 * leaves the system.
