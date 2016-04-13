@@ -1,20 +1,20 @@
 
-public class IO {
+public class IO implements Constants{
 	
 	private Queue IOqueue;
 	private Statistics statistics;
-
 	
-	public IO(Queue IOqueue, Statistics statistics, long IOsize){
+	
+	public IO(Queue IOqueue, Statistics statistics){
 		this.IOqueue = IOqueue;
 		this.statistics = statistics;
 		
 	}
 	
 	public void timePassed(long timePassed) {
-		statistics.memoryQueueLengthTime += IOqueue.getQueueLength()*timePassed;
+		statistics.IOQueueLengthTime += IOqueue.getQueueLength()*timePassed;
 		if (IOqueue.getQueueLength() > statistics.IOQueueLargestLength) {
-			statistics.IOqueueLargestLength = IOqueue.getQueueLength(); 
+			statistics.IOQueueLargestLength = IOqueue.getQueueLength(); 
 		}
     }
 	
