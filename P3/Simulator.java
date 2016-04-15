@@ -180,6 +180,10 @@ public class Simulator implements Constants
 	private void endIoOperation() {
 		// Incomplete
 	}
+	
+	private void addEvent(Event event){
+		eventQueue.insertEvent(event);
+	}
 
 	/**
 	 * Reads a number from the an input reader.

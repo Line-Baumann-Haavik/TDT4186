@@ -38,19 +38,33 @@ public class CPU {
 		return null;
 	}
 	
-	
+	public Event endProcess(long clock) {
+		activeProcess.leftCPU(clock);
+		activeProcess = null;
+		if (! CPUQueue.isEmpty()) {
+			activeProcess = (Process) CPUQueue.removeNext();
+		}
+		gui.setCpuActive(activeProcess);
+		return calculateNextCPUEvent(activeProcess, clock);
+	}
 	
 	private Event calculateNextCPUEvent(Process p, long clock) {
+		if (p == null) {
+			return null;
+		}
 		long remaining = p.getCpuTimeNeeded();
 		long nextIO = p.getTimeToNextIoOperation();
 		if (maxCPUTime < remaining && maxCPUTime < nextIO) {
 			statistics.nofForcedSwitches++;
-			return new Event(3, clock);
+			p.reduceCpuTimeNeeded(maxCPUTime);
+			p.reduceTimeToNextIoOperation(maxCPUTime);
+			return new Event(3, clock + maxCPUTime);
 		} else if (remaining <= maxCPUTime && remaining <= nextIO) {
 			statistics.nofCompletedProcesses++;
-			return new Event(2, clock);
+			return new Event(2, clock + remaining);
 		} else {
-			return new Event(4, clock);
+			p.reduceCpuTimeNeeded(nextIO);
+			return new Event(4, clock + nextIO);
 		}
 	}
 	
