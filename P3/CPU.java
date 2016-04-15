@@ -9,13 +9,16 @@ public class CPU {
 	
 	private Gui gui;
 	
+	private Simulator simulator;
+	
 	private Process activeProcess;
 	
-	public CPU(Queue CPUQueue, long maxCPUTime, Statistics statistics, Gui gui) {
+	public CPU(Queue CPUQueue, long maxCPUTime, Statistics statistics, Gui gui, Simulator simulator) {
 		this.CPUQueue = CPUQueue;
 		this.maxCPUTime = maxCPUTime;
 		this.statistics = statistics;
 		this.gui = gui;
+		this.simulator = simulator;
 	}
 	
 	public Event switchProcess(long clock) {
@@ -26,11 +29,14 @@ public class CPU {
 			Process prevProcess = activeProcess;
 			CPUQueue.insert(prevProcess);
 			activeProcess = (Process) CPUQueue.removeNext();
+			statistics.nofForcedSwitches++;
+			activeProcess.leftCPUQueue(clock);
 			gui.setCpuActive(activeProcess);
 			return calculateNextCPUEvent(activeProcess, clock);
 		} else {
 			if (! CPUQueue.isEmpty()) {
 				activeProcess = (Process) CPUQueue.removeNext();
+				activeProcess.leftCPUQueue(clock);
 				gui.setCpuActive(activeProcess);
 				return calculateNextCPUEvent(activeProcess, clock);
 			}
@@ -43,9 +49,22 @@ public class CPU {
 		activeProcess = null;
 		if (! CPUQueue.isEmpty()) {
 			activeProcess = (Process) CPUQueue.removeNext();
+			activeProcess.leftCPUQueue(clock);
 		}
 		gui.setCpuActive(activeProcess);
 		return calculateNextCPUEvent(activeProcess, clock);
+	}
+	
+	public Process callToIO(long clock) {
+		Process ioProcess = activeProcess;
+		activeProcess = null;
+		ioProcess.leftCPU(clock);
+		if (! CPUQueue.isEmpty()) {
+			activeProcess = (Process) CPUQueue.removeNext();
+			activeProcess.leftCPUQueue(clock);
+			simulator.addEvent(calculateNextCPUEvent(activeProcess, clock));
+		}
+		return ioProcess;
 	}
 	
 	private Event calculateNextCPUEvent(Process p, long clock) {
@@ -55,7 +74,6 @@ public class CPU {
 		long remaining = p.getCpuTimeNeeded();
 		long nextIO = p.getTimeToNextIoOperation();
 		if (maxCPUTime < remaining && maxCPUTime < nextIO) {
-			statistics.nofForcedSwitches++;
 			p.reduceCpuTimeNeeded(maxCPUTime);
 			p.reduceTimeToNextIoOperation(maxCPUTime);
 			return new Event(3, clock + maxCPUTime);
@@ -68,13 +86,15 @@ public class CPU {
 		}
 	}
 	
-//	public void insertProcessInQueue(Process p) {
-//		if (CPUQueue.isEmpty()) {
-//			activeProcess = p;
-//		} else {
-//			CPUQueue.insert(p);
-//		}
-//	}
+	public Event insertProcessInQueue(Process p, long clock) {
+		CPUQueue.insert(p);
+		if (activeProcess == null) {
+			activeProcess = (Process) CPUQueue.removeNext();
+			activeProcess.leftCPUQueue(clock);
+			return calculateNextCPUEvent(activeProcess, clock);
+		}
+		return null;
+	}
 	
 	public void timePassed(long timePassed) {
 		statistics.CPUQueueLengthTime += CPUQueue.getQueueLength()*timePassed;

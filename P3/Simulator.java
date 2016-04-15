@@ -154,8 +154,7 @@ public class Simulator implements Constants
 	 * Simulates a process switch.
 	 */
 	private void switchProcess() {
-		cpu.switchProcess(clock);
-		// TODO Complete
+		addEvent(cpu.switchProcess(clock));
 	}
 
 	/**
@@ -181,7 +180,7 @@ public class Simulator implements Constants
 		// Incomplete
 	}
 	
-	private void addEvent(Event event){
+	public void addEvent(Event event){
 		eventQueue.insertEvent(event);
 	}
 
