@@ -29,6 +29,8 @@ public class IO implements Constants{
 				return new Event(END_IO, clock + IOOperationTime); 
 		
 			}
+		}else{
+			return null;
 		}
 		// else no process are waiting for I/O
 		// else another process is already doing I/O
