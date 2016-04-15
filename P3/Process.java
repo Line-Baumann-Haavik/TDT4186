@@ -131,9 +131,29 @@ public class Process implements Constants
     public long getCpuTimeNeeded() {
 		return cpuTimeNeeded;
 	}
+    public void reduceCpuTimeNeeded(long number){
+    	long time=cpuTimeNeeded-number;
+		if (time<0){
+			cpuTimeNeeded=0;
+		}else{
+			cpuTimeNeeded=time;
+		}
+    }
 
 	public long getTimeToNextIoOperation() {
 		return timeToNextIoOperation;
+	}
+	public void reduceTimeToNextIoOperation(long number){
+		long time=timeToNextIoOperation-number;
+		if (time<0){
+			timeToNextIoOperation=0;
+		}else{
+			timeToNextIoOperation=time;
+		}
+	}
+	
+	public void calculateTimeToNextIoOperation(){
+		timeToNextIoOperation= (90 + (long)(Math.random()*20))*avgIoInterval/100;
 	}
 
 	/**
