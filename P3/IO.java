@@ -36,6 +36,7 @@ public class IO implements Constants{
 		// else another process is already doing I/O
 
 	}
+
 	
 	public void timePassed(long timePassed) {
 		statistics.IOQueueLengthTime += IOQueue.getQueueLength()*timePassed;
