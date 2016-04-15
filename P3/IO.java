@@ -2,30 +2,30 @@
 public class IO implements Constants{
 
 	
-	private Queue IOqueue;
+	private Queue IOQueue;
 	private Statistics statistics;
 	
 	
-	public IO(Queue IOqueue, Statistics statistics){
-		this.IOqueue = IOqueue;
+	public IO(Queue IOQueue, Statistics statistics){
+		this.IOQueue = IOQueue;
 		this.statistics = statistics;
 		
 	}
 	
 	public Event addIOrequest(Process requestingProcess, long clock){
-		ioQueue.insert(requestingProcess); 
+		IOQueue.insert(requestingProcess); 
 		requestingProcess.calculateTimeToNextIoOperation(); 
 	}
 	
 	public Event startIoOperation(long clock) { 
 		if(activeProcess == null) { 
 		// The device is free 
-			if(!ioQueue.isEmpty()) { 
+			if(!IOQueue.isEmpty()) { 
 				// Let the first process in the queue start I/O -----
 				// Update statistics 
-				statistics.nofProcessedIoOperations++;
+				statistics.nofProcessedIOOperations++;
 				// Calculate the duration of the I/O operation and return the END_IO event ------
-				return new Event(END_IO, clock + ioOperationTime); 
+				return new Event(END_IO, clock + IOOperationTime); 
 		
 			}
 		}
@@ -34,20 +34,15 @@ public class IO implements Constants{
 	}
 	
 	public void timePassed(long timePassed) {
-		statistics.IOQueueLengthTime += IOqueue.getQueueLength()*timePassed;
-		if (IOqueue.getQueueLength() > statistics.IOQueueLargestLength) {
-			statistics.IOQueueLargestLength = IOqueue.getQueueLength(); 
+		statistics.IOQueueLengthTime += IOQueue.getQueueLength()*timePassed;
+		if (IOQueue.getQueueLength() > statistics.IOQueueLargestLength) {
+			statistics.IOQueueLargestLength = IOQueue.getQueueLength(); 
 		}
     }
 	
 	public void insertProcess(Process p) {
-		IOqueue.insert(p);
+		IOQueue.insert(p);
 	}
 	
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }
