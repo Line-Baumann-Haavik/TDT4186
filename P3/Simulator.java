@@ -9,6 +9,8 @@ public class Simulator implements Constants
     private EventQueue eventQueue;
 	/** Reference to the memory unit */
     private Memory memory;
+    private CPU cpu;
+    private IO io;
 	/** Reference to the GUI interface */
 	private Gui gui;
 	/** Reference to the statistics collector */
@@ -41,6 +43,8 @@ public class Simulator implements Constants
 		statistics = new Statistics();
 		eventQueue = new EventQueue();
 		memory = new Memory(memoryQueue, memorySize, statistics);
+		cpu = new CPU(cpuQueue, maxCpuTime, statistics, gui);
+		io = new IO(ioQueue, statistics);
 		clock = 0;
 		// Add code as needed
     }
@@ -150,7 +154,8 @@ public class Simulator implements Constants
 	 * Simulates a process switch.
 	 */
 	private void switchProcess() {
-		// Incomplete
+		cpu.switchProcess(clock);
+		// TODO Complete
 	}
 
 	/**
