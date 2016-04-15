@@ -21,16 +21,45 @@ public class IO implements Constants{
 		if(activeProcess == null) { 
 		// The device is free 
 			if(!IOQueue.isEmpty()) { 
-				// Let the first process in the queue start I/O -----
+				// Let the first process in the queue start I/O
+				IOQueue.pop //not sure if right
 				// Update statistics 
-				statistics.nofProcessedIOOperations++;
-				// Calculate the duration of the I/O operation and return the END_IO event ------
+				statistics.nofIOOperations++;
+				// Calculate the duration of the I/O operation and return the END_IO event 
 				return new Event(END_IO, clock + IOOperationTime); 
 		
 			}
+		}else{
+			return null;
 		}
 		// else no process are waiting for I/O
 		// else another process is already doing I/O
+
+	}
+	
+	public Event addIOrequest(Process requestingProcess, long clock){
+		IOQueue.insert(requestingProcess); 
+		requestingProcess.calculateTimeToNextIoOperation(); 
+	}
+	
+	public Event startIoOperation(long clock) { 
+		if(activeProcess == null) { 
+		// The device is free 
+			if(!IOQueue.isEmpty()) { 
+				// Let the first process in the queue start I/O
+				IOQueue.pop //not sure if right
+				// Update statistics 
+				statistics.nofIOOperations++;
+				// Calculate the duration of the I/O operation and return the END_IO event 
+				return new Event(END_IO, clock + IOOperationTime); 
+		
+			}
+		}else{
+			return null;
+		}
+		// else no process are waiting for I/O
+		// else another process is already doing I/O
+
 	}
 	
 	public void timePassed(long timePassed) {
