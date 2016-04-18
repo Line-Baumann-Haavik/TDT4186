@@ -33,6 +33,8 @@ public class IO implements Constants{
 				long IOOperationTime = (90 + (long)(Math.random()*20))*avgIOOperationTime/100;
 				// Calculate the duration of the I/O operation and return the END_IO event 
 				return new Event(END_IO, clock + IOOperationTime); 
+			}else{
+				return null;
 			}
 		}else{
 			return null;
