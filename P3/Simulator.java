@@ -44,7 +44,7 @@ public class Simulator implements Constants
 		eventQueue = new EventQueue();
 		memory = new Memory(memoryQueue, memorySize, statistics);
 		cpu = new CPU(cpuQueue, maxCpuTime, statistics, gui,this);
-		io = new IO(ioQueue, statistics);
+		io = new IO(ioQueue, statistics,gui);
 		clock = 0;
 		// Add code as needed
     }
@@ -168,6 +168,7 @@ public class Simulator implements Constants
 	private void processIoRequest() {
 		Process p= cpu.callToIO(clock);
 		io.addIOrequest(p, clock);
+		addEvent(io.startIoOperation(clock));
 	}
 
 	/**
@@ -178,6 +179,7 @@ public class Simulator implements Constants
 		Process p =io.endIOOperation();
 		p.leftIO(clock);
 		cpu.insertProcessInQueue(p, clock);
+		addEvent(io.startIoOperation(clock));
 	}
 	
 	public void addEvent(Event event){
