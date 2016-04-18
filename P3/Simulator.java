@@ -133,18 +133,10 @@ public class Simulator implements Constants
 		Process p = memory.checkMemory(clock);
 		// As long as there is enough memory, processes are moved from the memory queue to the cpu queue
 		while(p != null) {
+			// Adds this process to the CPU queue!
+			// Also adds new events to the event queue if needed
+			cpu.insertProcessInQueue(p, clock);
 			
-			// TODO: Add this process to the CPU queue!
-			// Also add new events to the event queue if needed
-
-			// Since we haven't implemented the CPU and I/O device yet,
-			// we let the process leave the system immediately, for now.
-			//memory.processCompleted(p);
-			// Try to use the freed memory:
-			//flushMemoryQueue();
-			// Update statistics
-			//p.updateStatistics(statistics);
-
 			// Check for more free memory
 			p = memory.checkMemory(clock);
 		}
@@ -174,7 +166,8 @@ public class Simulator implements Constants
 	 * perform an I/O operation.
 	 */
 	private void processIoRequest() {
-		cpu.callToIO(clock);
+		Process p= cpu.callToIO(clock);
+		io.addIOrequest(p, clock);
 	}
 
 	/**
@@ -182,8 +175,8 @@ public class Simulator implements Constants
 	 * is done with its I/O operation.
 	 */
 	private void endIoOperation() {
-		Process p =io.endIOOperation;
-		
+		Process p =io.endIOOperation();
+		p.leftIO(clock);
 		cpu.insertProcessInQueue(p, clock);
 	}
 	
