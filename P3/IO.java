@@ -13,7 +13,7 @@ public class IO implements Constants{
 		this.gui = gui;
 	}
 	
-	public Event addIOrequest(Process requestingProcess, long clock){
+	public void addIOrequest(Process requestingProcess, long clock){
 		IOQueue.insert(requestingProcess); 
 		requestingProcess.calculateTimeToNextIoOperation(); 
 	}
@@ -23,13 +23,13 @@ public class IO implements Constants{
 		// The device is free 
 			if(!IOQueue.isEmpty()) { 
 				// Let the first process in the queue start I/O
-				activeProcess = (Process) IOQueue.removeNext(); //not sure if right
+				activeProcess = (Process) IOQueue.removeNext(); 
+				activeProcess.leftIOQueue(clock);
 				gui.setIoActive(activeProcess);
 				// Update statistics 
 				statistics.nofIOOperations++;
 				// Calculate the duration of the I/O operation and return the END_IO event 
 				return new Event(END_IO, clock + IOOperationTime); 
-		
 			}
 		}else{
 			return null;
@@ -37,6 +37,12 @@ public class IO implements Constants{
 		// else no process are waiting for I/O
 		// else another process is already doing I/O
 
+	}
+	public Process endIOOperation(){
+		Process p = activeProcess;
+		activeProcess = null;
+		gui.setIoActive(activeProcess);
+		return p;
 	}
 
 	
