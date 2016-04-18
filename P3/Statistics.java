@@ -56,7 +56,7 @@ public class Statistics
 		System.out.println("Number of created processes:                                  "+nofCreatedProcesses);
 		System.out.println("Number of (forced) process switches:                          "+nofForcedSwitches);
 		System.out.println("Number of processed I/O operations:                           "+nofIOOperations);
-		System.out.println("Average throughput (processes per second):                    "+(float)nofCompletedProcesses/simulationLength);
+		System.out.println("Average throughput (processes per second):                    "+(float)nofCompletedProcesses/simulationLength*1000);
 		System.out.println();
 		System.out.println("Total CPU time spent processing:                              "+totalTimeSpentInCPU);
 		System.out.println("Fraction of CPU time spent processing:                        "+((float)totalTimeSpentInCPU/simulationLength)*100+"%");
