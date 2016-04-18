@@ -5,6 +5,7 @@ public class IO implements Constants{
 	private Queue IOQueue;
 	private Statistics statistics;
 	private Gui gui;
+	private Process activeProcess;
 	
 	public IO(Queue IOQueue, Statistics statistics, Gui gui){
 		this.IOQueue = IOQueue;
@@ -22,8 +23,8 @@ public class IO implements Constants{
 		// The device is free 
 			if(!IOQueue.isEmpty()) { 
 				// Let the first process in the queue start I/O
-				IOQueue.pop() //not sure if right
-				gui.setIOActive();
+				activeProcess = (Process) IOQueue.removeNext(); //not sure if right
+				gui.setIoActive(activeProcess);
 				// Update statistics 
 				statistics.nofIOOperations++;
 				// Calculate the duration of the I/O operation and return the END_IO event 
