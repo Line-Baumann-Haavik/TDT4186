@@ -43,7 +43,7 @@ public class Simulator implements Constants
 		statistics = new Statistics();
 		eventQueue = new EventQueue();
 		memory = new Memory(memoryQueue, memorySize, statistics);
-		cpu = new CPU(cpuQueue, maxCpuTime, statistics, gui);
+		cpu = new CPU(cpuQueue, maxCpuTime, statistics, gui,this);
 		io = new IO(ioQueue, statistics);
 		clock = 0;
 		// Add code as needed
@@ -139,11 +139,11 @@ public class Simulator implements Constants
 
 			// Since we haven't implemented the CPU and I/O device yet,
 			// we let the process leave the system immediately, for now.
-			memory.processCompleted(p);
+			//memory.processCompleted(p);
 			// Try to use the freed memory:
-			flushMemoryQueue();
+			//flushMemoryQueue();
 			// Update statistics
-			p.updateStatistics(statistics);
+			//p.updateStatistics(statistics);
 
 			// Check for more free memory
 			p = memory.checkMemory(clock);
@@ -161,7 +161,12 @@ public class Simulator implements Constants
 	 * Ends the active process, and deallocates any resources allocated to it.
 	 */
 	private void endProcess() {
-		// Incomplete
+		Process p =cpu.endProcess(clock);
+		memory.processCompleted(p);
+		// Try to use the freed memory:
+		flushMemoryQueue();
+		// Update statistics
+		p.updateStatistics(statistics);
 	}
 
 	/**
@@ -169,7 +174,7 @@ public class Simulator implements Constants
 	 * perform an I/O operation.
 	 */
 	private void processIoRequest() {
-		// Incomplete
+		cpu.callToIO(clock);
 	}
 
 	/**
@@ -177,7 +182,9 @@ public class Simulator implements Constants
 	 * is done with its I/O operation.
 	 */
 	private void endIoOperation() {
-		// Incomplete
+		Process p =io.endIOOperation;
+		
+		cpu.insertProcessInQueue(p, clock);
 	}
 	
 	public void addEvent(Event event){
