@@ -4,12 +4,12 @@ public class IO implements Constants{
 	
 	private Queue IOQueue;
 	private Statistics statistics;
+	private Gui gui;
 	
-	
-	public IO(Queue IOQueue, Statistics statistics){
+	public IO(Queue IOQueue, Statistics statistics, Gui gui){
 		this.IOQueue = IOQueue;
 		this.statistics = statistics;
-		
+		this.gui = gui;
 	}
 	
 	public Event addIOrequest(Process requestingProcess, long clock){
@@ -23,6 +23,7 @@ public class IO implements Constants{
 			if(!IOQueue.isEmpty()) { 
 				// Let the first process in the queue start I/O
 				IOQueue.pop() //not sure if right
+				gui.setIOActive();
 				// Update statistics 
 				statistics.nofIOOperations++;
 				// Calculate the duration of the I/O operation and return the END_IO event 
