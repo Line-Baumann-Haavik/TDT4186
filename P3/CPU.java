@@ -28,6 +28,7 @@ public class CPU {
 			}
 			Process prevProcess = activeProcess;
 			CPUQueue.insert(prevProcess);
+			prevProcess.leftCPU(clock);
 			activeProcess = (Process) CPUQueue.removeNext();
 			statistics.nofForcedSwitches++;
 			activeProcess.leftCPUQueue(clock);
