@@ -135,7 +135,7 @@ public class Simulator implements Constants
 		while(p != null) {
 			// Adds this process to the CPU queue!
 			// Also adds new events to the event queue if needed
-			cpu.insertProcessInQueue(p, clock);
+			addEvent(cpu.insertProcessInQueue(p, clock));
 			
 			// Check for more free memory
 			p = memory.checkMemory(clock);
@@ -178,7 +178,7 @@ public class Simulator implements Constants
 	private void endIoOperation() {
 		Process p =io.endIOOperation();
 		p.leftIO(clock);
-		cpu.insertProcessInQueue(p, clock);
+		addEvent(cpu.insertProcessInQueue(p, clock));
 		addEvent(io.startIoOperation(clock));
 	}
 	
