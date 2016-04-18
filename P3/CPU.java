@@ -1,5 +1,5 @@
 
-public class CPU {
+public class CPU implements Constants {
 	
 	private Queue CPUQueue;
 	
@@ -80,12 +80,12 @@ public class CPU {
 		if (maxCPUTime < remaining && maxCPUTime < nextIO) {
 			p.reduceCpuTimeNeeded(maxCPUTime);
 			p.reduceTimeToNextIoOperation(maxCPUTime);
-			return new Event(3, clock + maxCPUTime);
+			return new Event(SWITCH_PROCESS, clock + maxCPUTime);
 		} else if (remaining <= maxCPUTime && remaining <= nextIO) {
-			return new Event(2, clock + remaining);
+			return new Event(END_PROCESS, clock + remaining);
 		} else {
 			p.reduceCpuTimeNeeded(nextIO);
-			return new Event(4, clock + nextIO);
+			return new Event(IO_REQUEST, clock + nextIO);
 		}
 	}
 	
