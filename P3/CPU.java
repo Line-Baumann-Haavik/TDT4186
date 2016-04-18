@@ -44,7 +44,8 @@ public class CPU {
 		return null;
 	}
 	
-	public Event endProcess(long clock) {
+	public Process endProcess(long clock) {
+		Process finProcess = activeProcess;
 		activeProcess.leftCPU(clock);
 		activeProcess = null;
 		if (! CPUQueue.isEmpty()) {
@@ -52,7 +53,8 @@ public class CPU {
 			activeProcess.leftCPUQueue(clock);
 		}
 		gui.setCpuActive(activeProcess);
-		return calculateNextCPUEvent(activeProcess, clock);
+		simulator.addEvent(calculateNextCPUEvent(activeProcess, clock));
+		return finProcess;
 	}
 	
 	public Process callToIO(long clock) {
@@ -64,6 +66,7 @@ public class CPU {
 			activeProcess.leftCPUQueue(clock);
 			simulator.addEvent(calculateNextCPUEvent(activeProcess, clock));
 		}
+		gui.setCpuActive(activeProcess);
 		return ioProcess;
 	}
 	
@@ -78,7 +81,6 @@ public class CPU {
 			p.reduceTimeToNextIoOperation(maxCPUTime);
 			return new Event(3, clock + maxCPUTime);
 		} else if (remaining <= maxCPUTime && remaining <= nextIO) {
-			statistics.nofCompletedProcesses++;
 			return new Event(2, clock + remaining);
 		} else {
 			p.reduceCpuTimeNeeded(nextIO);
@@ -91,6 +93,7 @@ public class CPU {
 		if (activeProcess == null) {
 			activeProcess = (Process) CPUQueue.removeNext();
 			activeProcess.leftCPUQueue(clock);
+			gui.setCpuActive(activeProcess);
 			return calculateNextCPUEvent(activeProcess, clock);
 		}
 		return null;
