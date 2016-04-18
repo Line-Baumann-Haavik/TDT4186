@@ -6,11 +6,13 @@ public class IO implements Constants{
 	private Statistics statistics;
 	private Gui gui;
 	private Process activeProcess;
+	private long avgIOOperationTime;
 	
-	public IO(Queue IOQueue, Statistics statistics, Gui gui){
+	public IO(Queue IOQueue, Statistics statistics, Gui gui, long avgIOOperationTime){
 		this.IOQueue = IOQueue;
 		this.statistics = statistics;
 		this.gui = gui;
+		this.avgIOOperationTime = avgIOOperationTime;
 	}
 	
 	public void addIOrequest(Process requestingProcess, long clock){
@@ -28,6 +30,7 @@ public class IO implements Constants{
 				gui.setIoActive(activeProcess);
 				// Update statistics 
 				statistics.nofIOOperations++;
+				long IOOperationTime = (90 + (long)(Math.random()*20))*avgIOOperationTime/100;
 				// Calculate the duration of the I/O operation and return the END_IO event 
 				return new Event(END_IO, clock + IOOperationTime); 
 			}
